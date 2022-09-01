@@ -1,5 +1,12 @@
 # PolybiusExperiments
-## Experimenting with Ciphers and Polybius Squares specificall
+### About
+This is a short console program in C# that will (eventually) take a plaintext file and encipher it using the Polybius Square. 
+
+TODO:
+* add a way to pass arguments to the program
+* maybe some way to define a custom polybius square 
+
+
 ### Basic Cipher
 With a basic Polybius cipher, you take a message, and map each character in the message to it's coordinates in a grid
 
@@ -116,6 +123,8 @@ Or an even larger grid featuring punctuation and other characters:
 9 │ Ñ       Ö       Ü       D       ¢       £              I        │
   └───────────────────────────────────────────────────────────────────┘
 ```
+
+
 
 
 
