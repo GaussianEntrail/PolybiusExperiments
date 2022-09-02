@@ -143,5 +143,24 @@ namespace CipherThing
             return s.ToString();
         }
 
+        public static T[,] MakeDuplicate<T>(this T[,] matrix)
+        {
+            int w = matrix.GetLength(0);
+            int h = matrix.GetLength(1);
+            T[,] copy = new T[w, h];
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    copy[i, j] = matrix[i, j];
+                }
+            }
+
+
+            return copy;
+        }
+
+
     }
 }
