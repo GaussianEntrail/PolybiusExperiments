@@ -5,32 +5,50 @@ using CipherThing;
 //2 - path of output file
 //3 - keyword for altering grid
 //4 - keyword for enciphering text
+//5 - path of custom polybius square
 string[] getArgs = Environment.GetCommandLineArgs();
-string inputFilePath = getArgs[1], outputFilePath = getArgs[2], gridAlterKeyword = "", cipherKeyword = "";
-bool doGridAltering = false, useKeyword = false;
+string inputFilePath = getArgs[1], outputFilePath = getArgs[2], gridAlterKeyword = "", cipherKeyword = "", pathCustomSquare = "";
+bool doGridAltering = false, useKeyword = false, useCustomSquare = false;
 
-if (getArgs.Length > 3) {
+if (getArgs.Length > 3)
+{
     if (!String.IsNullOrEmpty(getArgs[3]))
     {
         gridAlterKeyword = getArgs[3];
         doGridAltering = true;
     }
 }
-if (getArgs.Length > 4) {
+if (getArgs.Length > 4)
+{
     if (!String.IsNullOrEmpty(getArgs[4]))
     {
         cipherKeyword = getArgs[4];
         useKeyword = true;
     }
 }
+if (getArgs.Length > 5)
+{
+    if (!String.IsNullOrEmpty(getArgs[5]))
+    {
+        pathCustomSquare = getArgs[5]; 
+        useCustomSquare = true;
+        
+        Ciphers.MakeCustomSquare(pathCustomSquare);
+    }
+}
+
 //Take the file at getArgs[1] and encipher it, putting the output in getArgs[2]
 //Use the optional arguments in getArgs[3] and getArgs[4] to shuffle the polybius square or as a keyword
 string[] I = System.IO.File.ReadAllLines(inputFilePath);
 string[] O = new string[I.Length];
 
-if (doGridAltering && !String.IsNullOrEmpty(gridAlterKeyword)) { Ciphers.PolybiusSquareShift(gridAlterKeyword); }
+if (doGridAltering && !String.IsNullOrEmpty(gridAlterKeyword)) 
+{ 
+    Ciphers.PolybiusSquareShift(gridAlterKeyword, useCustomSquare); 
+}
 
-for (int k = 0; k < I.Length; k++) {
+for (int k = 0; k < I.Length; k++)
+{
     O[k] = CipherThing.Ciphers.EncodePolybiusToString(I[k], cipherKeyword, useKeyword);
 }
 
