@@ -30,28 +30,57 @@ namespace CipherThing
             
             {'Ñ', 'Ö', 'Ü', 'Ð', '¢', '£', '¤', 'Ì', ' ' },
         };
- 
-        static void ResetPolybiusSquare()
-        {
-            Polybius = new char[,] {
-                { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'},
-            
-                { 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R' },
-            
-                { 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0' },
-            
-                { '1', '2', '3', '4', '5', '6', '7', '8', '9' },
-            
-                { '`', '~', '!', '@', '#', '$', '%', '^', '&' },
-            
-                { '*', '(', ')', '-', '_', '+', '=', '{', '}' },
-            
-                { '[', ']', '|', '\\', ':', ';', '\'', '\"', '<' },
 
-                { '>', '/', 'Æ', '÷', 'Œ', 'Ø', 'ß', 'È', 'Ä' },
+        public static char[,] custom;
+
+        public static void MakeCustomSquare(string filePath)
+        {
+            //Use a Custom Polybius square from a file
+            string[] input = System.IO.File.ReadAllLines(filePath);
             
-                { 'Ñ', 'Ö', 'Ü', 'Ð', '¢', '£', '¤', 'Ì', ' ' },
-            };
+            int h = input.Length;
+            int w = input[0].Length;
+            char[,] customSquare = new char[h, w];
+
+            for (int line = 0; line < h; line++)
+            {
+                char[] charas = input[line].ToCharArray();
+                for (int c = 0; c < w; c++)
+                {
+                    customSquare[line, c] = charas[c];
+                }
+            }
+            custom = customSquare;
+        }
+ 
+        static void ResetPolybiusSquare(bool useCustomSquare)
+        {
+            if (!useCustomSquare)
+            {
+                Polybius = new char[,] {
+                    { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'},
+
+                    { 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R' },
+
+                    { 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0' },
+
+                    { '1', '2', '3', '4', '5', '6', '7', '8', '9' },
+
+                    { '`', '~', '!', '@', '#', '$', '%', '^', '&' },
+
+                    { '*', '(', ')', '-', '_', '+', '=', '{', '}' },
+
+                    { '[', ']', '|', '\\', ':', ';', '\'', '\"', '<' },
+
+                    { '>', '/', 'Æ', '÷', 'Œ', 'Ø', 'ß', 'È', 'Ä' },
+
+                    { 'Ñ', 'Ö', 'Ü', 'Ð', '¢', '£', '¤', 'Ì', ' ' },
+                };
+            }
+            else
+            {
+                Polybius = custom.MakeDuplicate();
+            }
         }
 
         static int FindPolybiusCoords(char c)
@@ -99,9 +128,9 @@ namespace CipherThing
             return cipherText.ToString();
         }
 
-        public static void PolybiusSquareShift (string keyword)
+        public static void PolybiusSquareShift (string keyword, bool useCustomSquare)
         {
-            ResetPolybiusSquare();
+            ResetPolybiusSquare(useCustomSquare);
             //use a keyword  to shift the square's rows and columns according to a keyword
             int[] shiftAmounts = EncodePolybius(keyword, "nokeyhere", false);
             for (int k = 0; k < shiftAmounts.Length; k++)
