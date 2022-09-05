@@ -94,6 +94,7 @@ namespace CipherThing
 
         static int[] EncodePolybius(string plainText, string keyword, bool useKey)
         {
+            
             int[] cipherCode = new int[plainText.Length];
 
             int h, i = 0, j = 0, k;
@@ -127,6 +128,29 @@ namespace CipherThing
             }
             return cipherText.ToString();
         }
+
+        public static string DecodePolybiusFromString(string cipherText, string keyword, bool useKey)
+        {
+            int[] polycoords = cipherText.Split(' ').Select(x => string.IsNullOrEmpty(x) ? 0 : int.Parse(x) ).ToArray();
+            
+            StringBuilder plainText = new();
+
+            int h, j, x, y;
+            for (int i = 0; i < polycoords.Length; i++)
+            {
+                j = polycoords[i];
+                if (polycoords[i] == 0) { plainText.Append(' '); continue; }
+                h = useKey ? FindPolybiusCoords(keyword[i % keyword.Length]) : 0;
+                x = ((j - h) % 10) - 1;
+                y = ((j - h) / 10) - 1;
+
+                plainText.Append( Polybius[y,x] );
+            }
+
+            return plainText.ToString();
+        }
+
+
 
         public static void PolybiusSquareShift (string keyword, bool useCustomSquare)
         {
